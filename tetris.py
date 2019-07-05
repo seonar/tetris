@@ -1,6 +1,7 @@
 ##  Tetris class
 ##
 ##  tetris를 간리하는 프로그램. Player class에서 행동을 받아 처리하고 list로 저장한다.
+## 테트리스 게임을 관리하는 프로그램. Player class에서 행동을 받아 처리하고 결과를 list로 저장한다.
 ##
 ##  varsion: 2019/07/05
 ##  author: Katsutoshi Eda
@@ -10,6 +11,7 @@ import random
 class Tetris:
     def __init__(self):
 ##      block(mino)의 돌 수 있는 개수, 모양 설정.
+## 테트리스 블록의 모양 설정
         self.minos = [                      ## 종류번호: block이름
             [1, [0, 0], [0, 0], [0, 0]],    ## 0:   null
             [2, [0, -1], [0, 1], [0, 2]],   ## 1:   I mino
@@ -26,27 +28,35 @@ class Tetris:
             [2, [0, -1], [-1, 0], [-1, 1]], ## 12:  S mino of hard drop
             [1, [0, 1], [1, 0], [1, 1]],    ## 13:  O mino of hard drop
             [4, [0, -1], [1, 0], [-1, 0]]   ## 14:  T mino of hard drop
-            ]                               ## 15:  disturbing block
+            ]                               ## 15:  disturbing block //공격블록
 ##      x: 12, y: 45로 구성. block이 없을 때 0. 벽은 1. block이 있을 때는 block의 종류.
+## 게임판은 (12,42)크기로 구성. 블록이 없을 때는 0, 벽은 1, 블록이 있을 때는 블록의 종류(int)
         self.board = [[0 for i in range(45)] for j in range(12)]
         for x in range(len(self.board)):
             for y in range(len(self.board[x])):
                 if x == 0 or x == 11 or y == 0: self.board[x][y] = 1
 ##      x: 5, y: 5로 구성. block이 없을 때 15. block이 있을 때는 board_hold[2][2]를 중심으로 저장. 숫자는 block의 종류.
+## 블록을 저장하는 저장판은 (5,5)크기로 구성. 저장된 블록이 없을 때는 15, 있을 때는 board_hold[2][2]를 중심으로 저장. 숫자는 블록의 종류(int)
         self.board_hold = [[15 for i in range(5)] for j in range(5)]
 ##      개수: 5, x: 5, y: 5로 구성. nexts[n][2][2]를 중심으로 저장. 숫자는 block의 종류.
+## 무슨 리스트인지 모르겠다
         self.nexts = [[[15 for i in range(5)] for j in range(5)] for k in range(5)]
 ##      상대방의공격을 저장 되어 있는 list. 15부터 시작하고 전전히 내린다. 0이 되면 disturbing block이 생긴다. 공격이 없을 때는 list의 length는 0.
+## 공격 게이지를 저장하는 리스트. 15부터 숫자를 낮춘다. 0이 되면 공격블록이 자신의 필드 가장아래에 쌓인다.
         self.attack = []
 ##      mino의 순서를 저장 되어 있는 list를 받기위한 변수 선언.
+## 블록의 순서가 저장되어있는 리스트를 받는 변수
         self.minoList = None
 ##      mino를 몇개 내는지를 count하는 변수.
+## 블록의 갯수를 카운트하는 변수
         self.cnt = 0
 ##      자신의 공격
         self.pawer = 0
 ##      attack list의 있는 공격이 0이 되었을때 몇개 있는지를 새는 변수.
+## 공격블록이 몇개 있는지 세는 변수?
         self.wall = 0
 ##      Game class에서 tick를 받아 block이 내릴 때를 반단하는 변수.
+## 시간을 받아 블록이 떨어질 때를 판단하는 변수
         self.time = 0
 ##      block를 지웠을 때 연속으로 몇번 지웠는지를 새는 변수.
         self.chain = 0
@@ -79,6 +89,7 @@ class Tetris:
         return minoChoice
 
 ##  mino가 둘 수 있는지 반단하는 method. return값은 boolean(True일 때 board에 저장)
+## 블럭의 회전여부를 판단하는 메소드
     def putMino(self, mino, action = False):
         if self.board[mino[0]][mino[1]] != 0 and self.board[mino[0]][mino[1]] < 8\
            or self.board[mino[0]][mino[1]] == 15: return False
