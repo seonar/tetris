@@ -1,9 +1,10 @@
 ##  Player class
 ##
 ##  tetris를 부는 프로그램.
+## 테트리스 게임을 실행하는 클래스
 ##
 ##  varsion: 2019/07/05
-##  author: Katsutoshi Eda
+##  author: Katsutoshi Eda / Tensai san
 
 from Tetris import *
 from Player import *
@@ -21,6 +22,7 @@ class Game:
         self.player.append(Player())
         self.player.append(Player())
 ##      mino는 7개의 종류가 있고 7개의 순서를 random으로 저장하고 list를 만든다.
+## 블록은 총 7가지 종류가 있고 블록이 나타나는 순서를 random으로 list에 저장한다.
         self.minoList = [[i + 1 for i in range(7)] for j in range(2)]
         for i in range(2):
             random.shuffle(self.minoList[i])
@@ -32,6 +34,7 @@ class Game:
         pygame.mixer.music.load("sound_effect/BGM2.wav")
         pygame.mixer.music.play(-1)
 ##      1은 board, 2는 nexts, 3은 hodl의 설정
+## 
         self.size1 = 24
         self.size2 = 15
         self.size3 = 20
@@ -39,10 +42,11 @@ class Game:
         self.img2 = pygame.transform.scale(self.img1, (self.size2 * 2, self.size2 * 8))
         self.img3 = pygame.transform.scale(self.img1, (self.size3 * 2, self.size3 * 8))
 ##      game의 tick를 설정하기 위한 변수 선언
+## 테트리스 게임의 시간을 설정하기 위한 변수 선언
         self.clock = pygame.time.Clock()
 ##      game screen의 크기 설정 
         self.screen = pygame.display.set_mode((self.size1 * 40 + 40, self.size1 * 20 + 50))
-##      각 sound effect 설정
+##      sound effect 설정
         self.clear = pygame.mixer.Sound("sound_effect/clear.wav")
         self.line = pygame.mixer.Sound("sound_effect/line.wav")
         self.damage = pygame.mixer.Sound("sound_effect/damage.wav")
@@ -60,6 +64,7 @@ class Game:
             self.drawBoard()
 
 ##  Tetris class의 신행도에 따라 mono list를 updata를 한다.
+## 테트리스 클래스의 진행도에 따라 mono 리스트를 업데이트 한다.
     def addMonoList(self):
         n = self.tetris[0].cnt
         if n < self.tetris[1].cnt: n = self.tetris[1].cnt
@@ -178,6 +183,7 @@ class Game:
         pygame.display.update()
 
 ##  game 끝난 후 명령을 받는 method.
+## 
     def end(self, index):
         fin = False
         while not fin:
@@ -193,6 +199,7 @@ class Game:
                         fin = True
 
 ##  game은 3번 실행해서 몇번 이겼는지를 승부로한다.
+## game의 총 3번 진행되고 몇 번 이겼는지로 승부한다.
 for i in range(3):
     game = Game()
     game.main()
